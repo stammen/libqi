@@ -37,7 +37,7 @@ pushd boost-build
           git checkout winrt-1.60.0
         popd
         pushd program_options  
-          git remote add winrt https://github.com/stammen/program_options .git
+          git remote add winrt https://github.com/stammen/program_options.git
           git fetch winrt winrt-1.60.0
           git checkout winrt-1.60.0
         popd
