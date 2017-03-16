@@ -427,7 +427,11 @@ namespace qi
       {
         fptr = new FunctionTypeInterfaceEq<T, S>(refMask);
         fptr->_resultType = returnType;
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+        std::swap(fptr->_argumentsType, argsType);
+#else
         fptr->_argumentsType = argsType;
+#endif
       }
       return fptr;
     }
