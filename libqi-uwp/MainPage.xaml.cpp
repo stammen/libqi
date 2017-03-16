@@ -6,7 +6,6 @@
 #include "pch.h"
 #include "MainPage.xaml.h"
 
-#include <boost/make_shared.hpp>
 #include <qi/log.hpp>
 #include <qi/applicationsession.hpp>
 #include <qi/anyobject.hpp>
@@ -34,14 +33,16 @@ MainPage::MainPage()
 {
 	InitializeComponent();
 
-    std::vector<std::string> arguments = { "libqi-uwp" };
+    int argc = 1;
+    char* a = "RobotHello";
+    char** argv = &a;
 
-    std::vector<char*> args;
-    for (const auto& arg : arguments)
-        args.push_back((char*)arg.data());
-    args.push_back(nullptr);
-    int argc = args.size() - 1;
-    auto argv = args.data();
     qi::ApplicationSession app(argc, argv);
+    app.startSession();
+    qi::SessionPtr session = app.session();
+    qi::AnyObject motion = session->service("ALMotion");
+    motion.call<void>("wakeUp");
+    motion.call<void>("rest");
+
 
 }
