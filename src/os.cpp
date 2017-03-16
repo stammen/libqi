@@ -142,6 +142,13 @@ namespace qi {
       return res;
     }
 
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    bool isProcessRunning(int pid, const std::string &fileName)
+    {
+      qiLogDebug() << "isProcessRunning not supported in Windows 10 UWP";
+      return false;
+    }
+#else
     bool isProcessRunning(int pid, const std::string &fileName)
     {
       if (pid <= 0)
@@ -158,6 +165,7 @@ namespace qi {
       qiLogDebug() << "Got handle for process #" << pid;
 
       DWORD exitCode = 0xFFFFFF;
+
       if (!GetExitCodeProcess(processHandle, &exitCode))
         return false;
 
@@ -238,6 +246,7 @@ namespace qi {
                    << (fileName + qi::path::detail::binSuffix());
       return actualProcessName == (fileName + qi::path::detail::binSuffix());
     }
+#endif
 
     /* getMachineId will return an uuid as a string.
      * If the uuid is not created yet, it will generate it and store it

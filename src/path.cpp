@@ -344,7 +344,11 @@ namespace qi
         boost::filesystem::path path(pathString, qi::unicodeFacet());
 
         // first, get size necessary for wchar_t* buffer
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+        length = 0;
+#else
         length = GetShortPathNameW(path.wstring(qi::unicodeFacet()).c_str(), NULL, 0);
+#endif
         if(length == 0)
         {
           qiLogVerbose() << "Cannot retrieve short path for "
@@ -354,7 +358,11 @@ namespace qi
 
         // now, get the path compatible DOS 8.3, ASCII compliant
         buffer = new wchar_t[length];
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+        length = 0;
+#else
         length = GetShortPathNameW(path.wstring(qi::unicodeFacet()).c_str(), buffer, length);
+#endif
         if(length == 0)
         {
           qiLogVerbose() << "Cannot retrieve short path for "

@@ -151,6 +151,7 @@ namespace log
 
   void PrivateConsoleLogHandler::textColorFG(char fg) const
   {
+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY == WINAPI_FAMILY_DESKTOP_APP)
     if (!_color)
       return;
 
@@ -162,6 +163,7 @@ namespace log
     {
       SetConsoleTextAttribute(_winScreenHandle, fg);
     }
+#endif
     return;
   }
 #endif
@@ -196,7 +198,11 @@ namespace log
     : _color(true)
     , _useLock(qi::os::getenv("QI_LOG_NOLOCK").empty())
 #ifdef _WIN32
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    , _winScreenHandle(NULL)
+#else
     , _winScreenHandle(GetStdHandle(STD_OUTPUT_HANDLE))
+#endif
 #endif
   {
   }
@@ -214,8 +220,11 @@ namespace log
 
   void ConsoleLogHandler::updateColor()
   {
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    const char* color = nullptr;
+#else
     const char* color = std::getenv("CLICOLOR");
-
+#endif
     if (color && atoi(color) == 0)
     {
       _p->_color = 0;

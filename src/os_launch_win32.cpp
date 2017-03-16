@@ -49,6 +49,10 @@ namespace os
     template <class WStringSequence>
     int winSpawn(const WStringSequence& wArgs)
     {
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+      (void) wArgs;
+      return -1;
+#else
       auto cwArgs = toCWStrings(wArgs);
       STARTUPINFOW startupInfo { };
       PROCESS_INFORMATION processInfo { };
@@ -58,6 +62,7 @@ namespace os
       if(!spawned)
         return -1;
       return static_cast<int>(processInfo.dwProcessId);
+#endif
     }
 
     std::string messageForError(DWORD errorCode)
@@ -108,19 +113,38 @@ namespace os
 
   int system(const char* command)
   {
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    // _wsystem cannot be used in applications that execute in the Windows Runtime
+    return ENOENT;
+#else
     boost::filesystem::path fname(command, qi::unicodeFacet());
     return _wsystem(fname.wstring(qi::unicodeFacet()).c_str());
+#endif
   }
 
   int getpid()
   {
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    // _getpid cannot be used in applications that execute in the Windows Runtime
+    return 0;
+#else
     return _getpid();
+#endif
   }
 
   int gettid()
   {
     return GetCurrentThreadId();
   }
+
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+  BOOL WINAPI GetExitCodeProcess(HANDLE  hProcess, LPDWORD lpExitCode)
+  {
+    (void)hProcess;
+    (void)lpExitCode;
+    return false;
+  }
+#endif
 
   int waitpid(int pid, int* status)
   {

@@ -523,7 +523,11 @@ namespace qi
     }
 
     // Enable TCP keepalive for faster timeout detection.
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+    static const char* envTimeout = nullptr;
+#else
     static const char* envTimeout = getenv("QI_TCP_PING_TIMEOUT");
+#endif
     int timeout = 30;
     if (envTimeout)
       timeout = strtol(envTimeout, 0, 0);

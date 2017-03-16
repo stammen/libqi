@@ -88,6 +88,11 @@ namespace qi {
   SignalSubscriberPrivate::SignalSubscriberPrivate() = default;
   SignalSubscriberPrivate::~SignalSubscriberPrivate() = default;
 
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+#   pragma warning(push) // Save warning settings.
+#   pragma warning(disable : 4996) // Disable deprecated std::fopen
+#endif
+
   SignalSubscriber::SignalSubscriber()
     : _p(std::make_shared<SignalSubscriberPrivate>())
     , linkId(_p->linkId)
@@ -96,6 +101,11 @@ namespace qi {
 
   SignalSubscriber::SignalSubscriber(const SignalSubscriber& other) = default;
   SignalSubscriber& SignalSubscriber::operator=(const SignalSubscriber& other) = default;
+
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+#pragma warning(pop) // Restore warnings to previous state.
+#endif
+
 
   SignalSubscriber::SignalSubscriber(const AnyObject& target, unsigned int method)
     : SignalSubscriber()

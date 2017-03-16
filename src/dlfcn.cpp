@@ -47,7 +47,11 @@ namespace qi {
       boost::filesystem::path fname(fullName, qi::unicodeFacet());
       qiLogVerbose() << "opening " << fname;
 #ifdef _WIN32
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+      handle = LoadPackagedLibrary(fname.wstring().c_str(), 0);
+#else
       handle = LoadLibraryW(fname.wstring().c_str());
+#endif
 #else
       if (flag == -1)
         flag = RTLD_NOW;

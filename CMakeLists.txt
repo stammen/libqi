@@ -31,6 +31,11 @@ if (WIN32)
   add_definitions(" -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -DWIN32_LEAN_AND_MEAN")
 endif()
 
+
+if(${CMAKE_SYSTEM_NAME} STREQUAL "WindowsStore")
+  add_definitions(" -D_WIN32_WINNT=0x0A00")
+endif()
+
 if (UNIX)
  add_definitions(" -fno-strict-aliasing ")
 endif()
@@ -375,13 +380,24 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 qi_stage_cmake(qimodule-config.cmake)
 include(qimodule-config.cmake)
 
-qi_create_lib(qi SHARED
-                 ${QI_H}     ${QI_C}
-                 ${QITYPE_H} ${QITYPE_C}
-                 ${QIM_H}    ${QIM_C}
-                 ${QIPERF_H} ${QIPERF_C}
-              DEPENDS ASSUME_SYSTEM_INCLUDE BOOST BOOST_ATOMIC BOOST_DATE_TIME BOOST_THREAD BOOST_CHRONO BOOST_FILESYSTEM BOOST_LOCALE BOOST_REGEX BOOST_PROGRAM_OPTIONS
-              SUBMODULE ${_tp_qi})
+if(WITH_BOOST_LOCALE)
+  qi_create_lib(qi SHARED
+                   ${QI_H}     ${QI_C}
+                   ${QITYPE_H} ${QITYPE_C}
+                   ${QIM_H}    ${QIM_C}
+                   ${QIPERF_H} ${QIPERF_C}
+                DEPENDS ASSUME_SYSTEM_INCLUDE BOOST BOOST_ATOMIC BOOST_DATE_TIME BOOST_THREAD BOOST_CHRONO BOOST_FILESYSTEM BOOST_LOCALE BOOST_REGEX BOOST_PROGRAM_OPTIONS
+                SUBMODULE ${_tp_qi})
+else()
+  qi_create_lib(qi SHARED
+                   ${QI_H}     ${QI_C}
+                   ${QITYPE_H} ${QITYPE_C}
+                   ${QIM_H}    ${QIM_C}
+                   ${QIPERF_H} ${QIPERF_C}
+                DEPENDS ASSUME_SYSTEM_INCLUDE BOOST BOOST_ATOMIC BOOST_DATE_TIME BOOST_THREAD BOOST_CHRONO BOOST_FILESYSTEM BOOST_REGEX BOOST_PROGRAM_OPTIONS
+                SUBMODULE ${_tp_qi})
+endif()
+ 
 
 #### Add optional libs {{{
 if(WIN32)

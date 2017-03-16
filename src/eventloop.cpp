@@ -102,7 +102,11 @@ namespace qi {
       nthread = boost::thread::hardware_concurrency();
       if (nthread < 3)
         nthread = 3;
+#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY != WINAPI_FAMILY_DESKTOP_APP)
+      const char* envNthread = nullptr;
+#else
       const char* envNthread = getenv("QI_EVENTLOOP_THREAD_COUNT");
+#endif
       if (envNthread)
         nthread = strtol(envNthread, 0, 0);
     }
