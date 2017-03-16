@@ -8,6 +8,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <StackPanel Orientation="Vertical">
+            <Button Name="wakeButton" Content="Wake" Click="wakeButton_Click" Margin="50,80,20,20"></Button>
+            <Button Name="restButton" Content="Rest" Click="restButton_Click" Margin="50,20,20,20"></Button>
+            <TextBlock Name="errortext" Text="Hello libqi" Margin="50,20,20,20"></TextBlock>
+        </StackPanel>
     </Grid>
 </Page>

@@ -6,6 +6,7 @@
 #pragma once
 
 #include "MainPage.g.h"
+#include <string>
 
 namespace libqi_uwp
 {
@@ -17,5 +18,11 @@ namespace libqi_uwp
 	public:
 		MainPage();
 
-	};
+    private:
+        Platform::Agile<Windows::UI::Core::CoreDispatcher> m_dispatcher;
+        void wakeButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+        void restButton_Click(Platform::Object^ sender, Windows::UI::Xaml::RoutedEventArgs^ e);
+        void SetText(Platform::String^ text);
+        void SetText(const std::string &text);
+    };
 }

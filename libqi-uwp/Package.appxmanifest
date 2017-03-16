@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="27e2f581-a73c-42b2-a9f3-957a8368f044" Publisher="CN=stamm" Version="1.0.9.0" />
+  <Identity Name="27e2f581-a73c-42b2-a9f3-957a8368f044" Publisher="CN=stamm" Version="1.0.10.0" />
   <mp:PhoneIdentity PhoneProductId="27e2f581-a73c-42b2-a9f3-957a8368f044" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>libqi-uwp</DisplayName>
@@ -24,5 +24,7 @@
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="internetClientServer" />
+    <Capability Name="privateNetworkClientServer" />
   </Capabilities>
 </Package>
