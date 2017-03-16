@@ -51,7 +51,7 @@ pushd boost-build
       popd
       call Bootstrap
       call b2 headers
-      call b2 install --prefix=../../boost-1.60.0 --with-chrono --with-filesystem --with-date_time --with-atomic --with-thread --with-system --with-regex --with-atomic --with-program_options toolset=msvc-14.0 windows-api=store link=static --variant=release
+      call b2 install --prefix=../../boost-1.60.0 --with-chrono --with-filesystem --with-date_time --with-atomic --with-thread --with-system --with-regex --with-atomic --with-program_options toolset=msvc-14.0 windows-api=store link=shared,static --variant=release
     popd
   popd
 echo Boost 1.60.0 installed
